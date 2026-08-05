@@ -4,9 +4,6 @@ import com.petproject.integration.model.Order;
 import com.petproject.integration.model.OrderItem;
 import com.petproject.integration.model.OrderStatus;
 import com.petproject.integration.xml.generated.ObjectFactory;
-import com.petproject.integration.xml.generated.OrderItemXml;
-import com.petproject.integration.xml.generated.OrderItems;
-import com.petproject.integration.xml.generated.OrderXml;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -33,7 +30,7 @@ public final class OrderMapper {
     private OrderMapper() {
     }
 
-    public static Order toPojo(OrderXml xmlOrder) {
+    public static Order toPojo(com.petproject.integration.xml.generated.Order xmlOrder) {
         if (xmlOrder == null) {
             return null;
         }
@@ -50,22 +47,19 @@ public final class OrderMapper {
         return order;
     }
 
-    public static OrderXml toXml(Order order) {
+    public static com.petproject.integration.xml.generated.Order toXml(Order order) {
         if (order == null) {
             return null;
         }
-        OrderXml xmlOrder = XML_FACTORY.createOrderXml();
+        com.petproject.integration.xml.generated.Order xmlOrder = XML_FACTORY.createOrder();
         xmlOrder.setOrderId(order.getOrderId());
         xmlOrder.setCustomerId(order.getCustomerId());
-        // com.petproject.integration.xml.generated.OrderStatus лишається з повним шляхом:
-        // model.OrderStatus вище вже займає коротке ім'я "OrderStatus" в цьому файлі,
-        // а сам XJC-enum перейменувати не вдалось (див. коментар у src/main/xjb/bindings.xjb).
         xmlOrder.setStatus(com.petproject.integration.xml.generated.OrderStatus.fromValue(order.getStatus().name()));
         xmlOrder.setCreatedAt(toXmlGregorianCalendar(order.getCreatedAt()));
 
-        OrderItems xmlItems = XML_FACTORY.createOrderItems();
+        com.petproject.integration.xml.generated.OrderItems xmlItems = XML_FACTORY.createOrderItems();
         for (OrderItem item : order.getItems()) {
-            OrderItemXml xmlItem = XML_FACTORY.createOrderItemXml();
+            com.petproject.integration.xml.generated.OrderItem xmlItem = XML_FACTORY.createOrderItem();
             xmlItem.setSku(item.getSku());
             xmlItem.setQuantity(BigInteger.valueOf(item.getQuantity()));
             xmlItem.setUnitPrice(item.getUnitPrice());
