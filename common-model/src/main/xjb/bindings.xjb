@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Зовнішній JAXB-binding: перейменовує класи, згенеровані xjc з order.xsd,
+    так, щоб вони НЕ збігались короткими іменами з POJO з пакету
+    com.petproject.integration.model (Order, OrderItem).
+
+    Без цього файлу xjc генерує com.petproject.integration.xml.generated.Order
+    та .OrderItem — однакові короткі назви з JSON-моделлю змушували б OrderMapper
+    (і будь-який інший клас, що працює з обома одразу) писати повний package-шлях
+    замість короткого import.
+
+    OrderStatus навмисно НЕ перейменований тут: XJC 3.0.2 (com.sun.istack
+    UnusedCustomizationChecker) відмовляється honor-ити <jaxb:class> customization
+    на глобальному xs:simpleType, з якого генерується типобезпечний enum —
+    "compiler was unable to honor this class customization. It is attached to
+    a wrong place, or its inconsistent with other bindings" (перевірено emпірично:
+    той самий customization для complexType Order/OrderItem працює без проблем).
+    Тому com.petproject.integration.xml.generated.OrderStatus лишається з повним
+    package-шляхом там, де він конфліктує з model.OrderStatus (OrderMapper) —
+    єдине місце в проєкті, де FQN лишається невимушено.
+-->
+<jaxb:bindings xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               version="3.0"
+               schemaLocation="../resources/xsd/order.xsd">
+
+    <jaxb:bindings node="//xs:complexType[@name='Order']">
+        <jaxb:class name="OrderXml"/>
+    </jaxb:bindings>
+
+    <jaxb:bindings node="//xs:complexType[@name='OrderItem']">
+        <jaxb:class name="OrderItemXml"/>
+    </jaxb:bindings>
+
+</jaxb:bindings>

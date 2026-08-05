@@ -11,6 +11,12 @@
            targetNamespace="http://petproject.integration/orders"
            elementFormDefault="qualified">
 
+    <!--
+        Перейменування згенерованих JAXB-класів (Order -> OrderXml і т.д., щоб не
+        збігались з POJO в com.petproject.integration.model) винесено в окремий
+        binding-файл: src/main/xjb/bindings.xjb. Сам wire-контракт (XSD) навмисно
+        лишається "чистим" від деталей Java-кодогенерації.
+    -->
     <xs:simpleType name="OrderStatus">
         <xs:restriction base="xs:string">
             <xs:enumeration value="NEW"/>
