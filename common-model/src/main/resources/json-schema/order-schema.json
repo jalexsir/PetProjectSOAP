@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://petproject.integration/schemas/order-schema.json",
+  "title": "Order",
+  "description": "JSON-подання тієї ж канонічної моделі Order, що описана в order.xsd. Використовується rest-service для валідації вхідних REST-запитів (аналог XSD-валідації для SOAP).",
+  "type": "object",
+  "required": ["orderId", "customerId", "status", "createdAt", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "customerId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["NEW", "CONFIRMED", "SHIPPED", "CANCELLED"]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sku", "quantity", "unitPrice"],
+        "properties": {
+          "sku": {
+            "type": "string",
+            "minLength": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "unitPrice": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      }
+    }
+  }
+}

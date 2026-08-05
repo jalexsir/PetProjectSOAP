@@ -1,0 +1,15 @@
+mqtt:
+  embedded-broker:
+    enabled: ${MQTT_EMBEDDED_BROKER_ENABLED:true}
+  broker:
+    port: ${MQTT_BROKER_PORT:1883}
+    url: ${MQTT_BROKER_URL:tcp://localhost:1883}
+
+logging:
+  level:
+    com.petproject.integration.mqtt: INFO
+
+spring:
+  main:
+    banner-mode: "off"
+    web-application-type: none

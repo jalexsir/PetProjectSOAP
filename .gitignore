@@ -1,0 +1,12 @@
+target/
+*.class
+*.log
+
+# Приватні ключі та keystore/truststore — генеруються локально certs/generate-certs.sh,
+# ніколи не комітяться в git.
+certs/generated/
+
+.idea/
+*.iml
+.vscode/
+.DS_Store
