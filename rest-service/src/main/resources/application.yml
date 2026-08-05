@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: rest-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:${server.port}/.well-known/jwks.json
+
+# Другий (mTLS) конектор Tomcat, окремо від основного HTTP-порту вище.
+# mtls.enabled=true вмикається лише після certs/generate-certs.sh, наприклад:
+#   MTLS_ENABLED=true mvn -pl rest-service spring-boot:run
+mtls:
+  enabled: ${MTLS_ENABLED:false}
+  port: ${MTLS_PORT:8444}
+  keystore: ${MTLS_KEYSTORE:../certs/generated/server-keystore.p12}
+  keystore-password: ${MTLS_KEYSTORE_PASSWORD:changeit}
+  truststore: ${MTLS_TRUSTSTORE:../certs/generated/server-truststore.p12}
+  truststore-password: ${MTLS_TRUSTSTORE_PASSWORD:changeit}
+
+logging:
+  level:
+    org.springframework.security: INFO

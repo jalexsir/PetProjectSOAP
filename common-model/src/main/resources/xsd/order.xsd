@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Канонічна XSD-схема замовлення (Canonical Data Model).
+    Використовується як:
+      1) контракт SOAP-сервісу (contract-first Spring-WS генерує WSDL саме з цієї схеми);
+      2) джерело для JAXB-класів (xjc), якими користуються soap-service та integration-hub;
+      3) взірець для JSON Schema (order-schema.json) — та сама модель, інший формат представлення.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://petproject.integration/orders"
+           targetNamespace="http://petproject.integration/orders"
+           elementFormDefault="qualified">
+
+    <xs:simpleType name="OrderStatus">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NEW"/>
+            <xs:enumeration value="CONFIRMED"/>
+            <xs:enumeration value="SHIPPED"/>
+            <xs:enumeration value="CANCELLED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="OrderItem">
+        <xs:sequence>
+            <xs:element name="sku" type="xs:string"/>
+            <xs:element name="quantity" type="xs:positiveInteger"/>
+            <xs:element name="unitPrice" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="OrderItems">
+        <xs:sequence>
+            <xs:element name="item" type="tns:OrderItem" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Order">
+        <xs:sequence>
+            <xs:element name="orderId" type="xs:string"/>
+            <xs:element name="customerId" type="xs:string"/>
+            <xs:element name="status" type="tns:OrderStatus"/>
+            <xs:element name="createdAt" type="xs:dateTime"/>
+            <xs:element name="items" type="tns:OrderItems"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- SOAP-операція: getOrder -->
+    <xs:element name="getOrderRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="orderId" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getOrderResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="order" type="tns:Order"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- SOAP-операція: createOrder -->
+    <xs:element name="createOrderRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="order" type="tns:Order"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createOrderResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="orderId" type="xs:string"/>
+                <xs:element name="status" type="tns:OrderStatus"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- SOAP Fault payload: замовлення не знайдено -->
+    <xs:element name="orderNotFoundFault">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="orderId" type="xs:string"/>
+                <xs:element name="message" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

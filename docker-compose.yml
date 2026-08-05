@@ -1,0 +1,11 @@
+services:
+  # Альтернатива вбудованому Moquette-брокеру в mqtt-integration:
+  # docker compose up -d mosquitto
+  # MQTT_EMBEDDED_BROKER_ENABLED=false mvn -pl mqtt-integration spring-boot:run
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: petproject-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro

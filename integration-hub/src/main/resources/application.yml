@@ -1,0 +1,28 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: integration-hub
+
+hub:
+  soap-service:
+    base-url: ${HUB_SOAP_URL:http://localhost:8081/ws}
+    username: ${HUB_SOAP_USER:integration}
+    password: ${HUB_SOAP_PASSWORD:integration-pass}
+  rest-service:
+    base-url: ${HUB_REST_URL:http://localhost:8082/api/basic/orders}
+    username: ${HUB_REST_USER:integration}
+    password: ${HUB_REST_PASSWORD:integration-pass}
+  mqtt:
+    broker-url: ${HUB_MQTT_BROKER_URL:tcp://localhost:1883}
+    topic: ${HUB_MQTT_TOPIC:integration/orders/events}
+
+camel:
+  springboot:
+    main-run-controller: true
+
+logging:
+  level:
+    CDS_AUDIT: INFO
+    org.apache.camel: INFO
