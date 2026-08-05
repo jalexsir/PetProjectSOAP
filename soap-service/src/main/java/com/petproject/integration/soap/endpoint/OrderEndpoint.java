@@ -5,7 +5,7 @@ import com.petproject.integration.xml.generated.CreateOrderRequest;
 import com.petproject.integration.xml.generated.CreateOrderResponse;
 import com.petproject.integration.xml.generated.GetOrderRequest;
 import com.petproject.integration.xml.generated.GetOrderResponse;
-import com.petproject.integration.xml.generated.Order;
+import com.petproject.integration.xml.generated.OrderXml;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -30,7 +30,7 @@ public class OrderEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getOrderRequest")
     @ResponsePayload
     public GetOrderResponse getOrder(@RequestPayload GetOrderRequest request) {
-        Order order = orderStore.findById(request.getOrderId())
+        OrderXml order = orderStore.findById(request.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException(request.getOrderId()));
 
         GetOrderResponse response = new GetOrderResponse();
@@ -41,7 +41,7 @@ public class OrderEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createOrderRequest")
     @ResponsePayload
     public CreateOrderResponse createOrder(@RequestPayload CreateOrderRequest request) {
-        Order saved = orderStore.save(request.getOrder());
+        OrderXml saved = orderStore.save(request.getOrder());
 
         CreateOrderResponse response = new CreateOrderResponse();
         response.setOrderId(saved.getOrderId());
