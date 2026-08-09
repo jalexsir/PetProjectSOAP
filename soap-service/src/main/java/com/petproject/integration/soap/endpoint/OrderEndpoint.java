@@ -3,6 +3,8 @@ package com.petproject.integration.soap.endpoint;
 import com.petproject.integration.soap.service.OrderStore;
 import com.petproject.integration.xml.generated.CreateOrderRequest;
 import com.petproject.integration.xml.generated.CreateOrderResponse;
+import com.petproject.integration.xml.generated.DeleteOrderRequest;
+import com.petproject.integration.xml.generated.DeleteOrderResponse;
 import com.petproject.integration.xml.generated.GetOrderRequest;
 import com.petproject.integration.xml.generated.GetOrderResponse;
 import com.petproject.integration.xml.generated.Order;
@@ -46,6 +48,20 @@ public class OrderEndpoint {
         CreateOrderResponse response = new CreateOrderResponse();
         response.setOrderId(saved.getOrderId());
         response.setStatus(saved.getStatus());
+        return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteOrderRequest")
+    @ResponsePayload
+    public DeleteOrderResponse deleteOrder(@RequestPayload DeleteOrderRequest request) {
+        boolean deleted = orderStore.delete(request.getOrderId());
+        if (!deleted) {
+            throw new OrderNotFoundException(request.getOrderId());
+        }
+
+        DeleteOrderResponse response = new DeleteOrderResponse();
+        response.setOrderId(request.getOrderId());
+        response.setDeleted(true);
         return response;
     }
 }
