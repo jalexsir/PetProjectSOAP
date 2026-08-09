@@ -40,6 +40,10 @@ public class OrderStore {
         return Optional.ofNullable(orders.get(orderId));
     }
 
+    public boolean delete(String orderId) {
+        return orders.remove(orderId) != null;
+    }
+
     public Order save(Order order) {
         if (order.getOrderId() == null || order.getOrderId().isBlank()) {
             order.setOrderId("ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());

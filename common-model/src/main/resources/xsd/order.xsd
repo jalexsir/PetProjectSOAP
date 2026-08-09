@@ -79,6 +79,24 @@
         </xs:complexType>
     </xs:element>
 
+    <!-- SOAP-операція: deleteOrder -->
+    <xs:element name="deleteOrderRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="orderId" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteOrderResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="orderId" type="xs:string"/>
+                <xs:element name="deleted" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <!-- SOAP Fault payload: замовлення не знайдено -->
     <xs:element name="orderNotFoundFault">
         <xs:complexType>
